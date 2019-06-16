@@ -1,11 +1,12 @@
 {% extends 'base.html' %}
 
-{% block body %}
+{% block content %}
 <div class='container'>
-    <h1>Submit an Observation</hl>
-    <form method = "post">
+    <h1>Submit an Observation</h1>
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
+<!--     <input type="file" name="file"> -->
         <button type="submit">Upload File</button>
     </form>
 </div>
