@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.views.generic import TemplateView
 from .models import ObsField, ObsRecords
 from .forms import ObsForm
-
+from .extras import obs_to_db
 # Create your views here.
 
 class obs_submission(TemplateView):
@@ -27,13 +27,16 @@ class obs_submission(TemplateView):
         print("THIS IS A DAMN Form", form)
         obsfile = form.cleaned_data['obsfile']
         field = form.cleaned_data['field']
+        field_no = field.field_no
+ #       field_no = field.split('-')[0].strip(' ')
+        print("FIELD", field.field_no)
 #   #      print("request files", request.FILES)
 #   #      print(obsfile.name)
 #   #      obsfile.read().decode('UTF-8')
 #         print("this is a field", field)
 #         print("this is a file", obsfile)
-        data = obsfile.read().decode('UTF-8')
-
+        status_message = obs_to_db(obsfile, field)
+        print(status_message)
         return render(request, self.template_name)
 
     

@@ -3,6 +3,7 @@ from django.db import models
 # Models controlling BRITE Observations
 
 class Satellite(models.Model):
+#    sat_no = models.AutoField(primary_key=True)
     sat_id = models.CharField(max_length=5)
     sat_name = models.CharField(max_length=45)
 
@@ -19,19 +20,30 @@ class ObsField(models.Model):
     field_status = models.ForeignKey(Status, on_delete=models.CASCADE, db_column='field_status')
 
     def __str__(self):
-        return self.field_name
+        return str(self.field_no)+' - '+str(self.field_name)
+
+    def field_num(self):
+        return self.field_no
 
 
 class ObsRecords(models.Model):
     idobs_records = models.AutoField(primary_key=True)
-    star_id = models.CharField(max_length=45)
-    star_name = models.CharField(max_length=45, blank=True, null=True)
+    hd_num = models.IntegerField(blank=False, null=True)
+    v_mag = models.DecimalField(decimal_places=3, max_digits=5, blank=True, null=True)
     sp_type = models.CharField(max_length=45, blank=True, null=True)
-    obs_start = models.CharField(max_length=45)
-    obs_end = models.CharField(max_length=45)
-    sat = models.ForeignKey('Satellite', models.CASCADE)
-    no_obs = models.IntegerField()
+    star_name = models.CharField(max_length=45, blank=True, null=True)
+    sat = models.ForeignKey(Satellite, models.CASCADE, db_column='sat_id')
+    setup = models.IntegerField(blank=False, null=True)
+    obs_start = models.DecimalField(decimal_places=6, max_digits=13, blank=False, null=True)
+    obs_end = models.DecimalField(decimal_places=6, max_digits=13, blank=False, null=True)
+    nred = models.IntegerField(blank=False, null=True)
+    norg = models.IntegerField(blank=False, null=True)
+    exptime = models.IntegerField(blank=False, null=True)
+    nstack = models.IntegerField(blank=False, null=True)
+    xpos = models.IntegerField(blank=False, null=True)
+    ypos = models.IntegerField(blank=False, null=True)
+    xsize = models.IntegerField(blank=False, null=True)
+    ysize = models.IntegerField(blank=False, null=True)
     obs_mode = models.CharField(max_length=10)
-    availability = models.CharField(max_length=45)
+    availability = models.CharField(max_length=45, default='PP', blank=False, null=False)
     field_no = models.ForeignKey(ObsField, models.CASCADE, db_column='field_no')
-    setup = models.IntegerField(null=False)
