@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+<!-- @todo make pretty-->
+{% block content %}
+    <div class=container> 
+        {% for Obsfield in Obsfields %}
+            <h1>{{ Obsfield.field_name }}</h1>
+        {% endfor %}
+    </div> 
+
+{% endblock %}

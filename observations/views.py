@@ -9,10 +9,6 @@ class obs_submission(TemplateView):
     
     template_name = "observations/obs_submission.html"
 
- #   prompt = {
- #       'order': "@todo"
- #   }
-
     def get(self, request):
         
         form = ObsForm()
@@ -22,29 +18,26 @@ class obs_submission(TemplateView):
     def post(self, request):
         print("POST request", request.POST)
         print("FILE request", request.FILES)
- #       obsfile = request.FILES['obsfile']
         form = ObsForm(request.POST, request.FILES)
         print("THIS IS A DAMN Form", form)
         obsfile = form.cleaned_data['obsfile']
         field = form.cleaned_data['field']
         field_no = field.field_no
- #       field_no = field.split('-')[0].strip(' ')
         print("FIELD", field.field_no)
-#   #      print("request files", request.FILES)
-#   #      print(obsfile.name)
-#   #      obsfile.read().decode('UTF-8')
-#         print("this is a field", field)
-#         print("this is a file", obsfile)
+
         status_message = obs_to_db(obsfile, field)
         print(status_message)
         return render(request, self.template_name)
 
-    
-            
-    # obsfile = request.FILES['file']
+class Observations(TemplateView):
 
-    # if not obsfile.name.endswith('.csv'):
-    #     messages.error(request, "Observation must be a .csv file")
+    template_name = "observations/observations.html"
 
-    # data_set = obsfile.read().decode('UTF-8')
-    # io_string = io.STRINGIO(data_set)
+    def get(self, request):
+
+        Obsfields  = ObsField.objects.all()
+        context = {
+            'Obsfields': Obsfields
+        }
+
+        return render(request, self.template_name, context)
