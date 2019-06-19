@@ -29,6 +29,7 @@ class obs_submission(TemplateView):
         print(status_message)
         return render(request, self.template_name)
 
+
 class Observations(TemplateView):
 
     template_name = "observations/observations.html"
@@ -38,6 +39,19 @@ class Observations(TemplateView):
         Obsfields  = ObsField.objects.all()
         context = {
             'Obsfields': Obsfields
+        }
+
+        return render(request, self.template_name, context)
+
+
+class ObservationField(TemplateView):
+
+    template_name = "observations/observation_field.html"
+
+    def get(self, request, fieldname="Default"):
+
+        context = {
+            'fieldname' : fieldname
         }
 
         return render(request, self.template_name, context)
