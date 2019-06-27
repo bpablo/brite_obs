@@ -62,7 +62,7 @@ def obs_to_db(file, obsfield):
             #     'obsmode', str(obsmode)+'\n',
             # )
             _, created = ObsRecords.objects.update_or_create(
-                field_no = obsfield,
+                field = obsfield,
                 hd_num = int(hd_num),
                 v_mag = float(v_mag),
                 sp_type = str(sptype),
