@@ -48,7 +48,7 @@ class ObservationField(TemplateView):
 
     template_name = "observations/observation_field.html"
 
-    def get(self, request, fieldname="Default"):
+    def get(self, request, fieldname='default'):
 
         context = {
             'fieldname' : fieldname
