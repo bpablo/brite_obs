@@ -48,10 +48,38 @@ class ObservationField(TemplateView):
 
     template_name = "observations/observation_field.html"
 
-    def get(self, request, fieldname='default'):
+    def get(self, request, fieldno, fieldname):
+
+        field = ObsField.objects.get(field_no=fieldno, field_name=fieldname)
+        #stars = field.order_by('hd_num').values('hd_num').distinct()
+        
+        field_records = ObsRecords.objects.filter(field=field)
+        stars = field_records.order_by('hd_num').values('hd_num').distinct()
+        obsbystar = []
+        for x in range(len(stars)):
+            starobs = field_records.filter(**stars[x])
+            star_dict = {
+                "hd_num" : starobs[0].hd_num,
+                "star_name": starobs[0].star_name,
+                "v_mag" : starobs[0].v_mag,
+                "sp_type" : starobs[0].sp_type,
+            }
+            obsbystar.append(star_dict)
+            
+        sats = field_records.values('sat_id').distinct()
+        print(sats[0])
+        dict = {
+            "pok1" : "bananas",
+            "pok2" : "nova",
+
+        }
 
         context = {
-            'fieldname' : fieldname
+            'fieldno' : fieldno,
+            'fieldname' : fieldname,
+            'field_records' : field_records,
+            'obsbystar' : obsbystar,
+            'test_dict' : dict
         }
 
         return render(request, self.template_name, context)

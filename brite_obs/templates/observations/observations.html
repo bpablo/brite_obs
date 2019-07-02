@@ -1,10 +1,47 @@
 {% extends 'base.html' %}
 <!-- @todo make pretty-->
-{% block content %}
-    <div class=container> 
-        {% for Obsfield in Obsfields %}
-            <h1>{{ Obsfield.field_name }}</h1>
-        {% endfor %}
-    </div> 
 
+{% block extra_css %}
+    <style>
+        table {
+            display: table;
+            border-collapse: separate;
+            border-spacing: 2px;
+            border-color: gray;
+        }
+    </style>
+
+{% endblock %}
+
+{% block content %}
+
+    <div class=container> 
+
+        <div> 
+            <h1>BRITE Observation Fields</h1>
+        </div>
+        <br><br>
+        <table> 
+            <tr>
+                <th>Field no.</th>
+                <th>Obs ID</th>
+                <th>Field Status</th>
+            </tr>
+            {% for field in Obsfields%}
+                <tr>
+                    <td>{{ field.field_no }}</td>   
+                    <td>{{ field.field_name }}</td>
+                    <td>{{ field.field_status.field_status }}</td> 
+                </tr>
+            {% endfor %}
+        </table>
+
+    </div> 
+<!--
+    <div> 
+        {% for field in ObsFields%}
+            <h1>{{ field.field_name }}</h1>
+        {% endfor %}
+    </div>
+-->
 {% endblock %}

@@ -1,9 +1,30 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-    <div> 
-        <h1>{{ fieldname }}</h1>
+    <div>
+        <h1>{{ fieldno }}<br>{{ fieldname }}</h1>
+         <br><br>
+        <div>     
+       
+            <table> 
+                <tr>
+                    <th>HD Number</th>
+                    <th>Name</th>
+                    <th>Mag V</th>
+                    <th>Spectral Type</th>
+                    <th>PI</th>
+                    <th>Availability</th>
+                </tr>
+                {% for obs in obsbystar%}
+                    <tr>
+                        <td>{{ obs.hd_num }}</td>   
+                        <td>{{ obs.star_name }}</td>
+                        <td>{{ obs.v_mag }}</td> 
+                        <td>{{ obs.sp_type }}</td> 
+                        <td></td> 
+                        <td></td> 
+                    </tr> 
+                {% endfor %}
+        </div>
     </div>
-
 {% endblock%}

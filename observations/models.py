@@ -23,7 +23,7 @@ class ObsField(models.Model):
         return str(self.field_no)+' - '+str(self.field_name)
 
     def field_num(self):
-        return self.field_no
+        return str(self.field_no)
 
 
 class ObsRecords(models.Model):
