@@ -46,5 +46,6 @@ class ObsRecords(models.Model):
     ysize = models.IntegerField(blank=False, null=True)
     obs_mode = models.CharField(max_length=10)
     availability = models.CharField(max_length=45, default='PP', blank=False, null=False)
+    data_release = models.CharField(max_length=3, default='R5', blank=False, null=False)
     field = models.ForeignKey(ObsField, on_delete=models.CASCADE, null=True)
 #    field_no = models.ForeignKey(ObsField, models.CASCADE, db_column='field_no')

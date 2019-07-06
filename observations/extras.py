@@ -24,7 +24,12 @@ def obs_to_db(file, obsfield):
         field = column[5].split('-')[0]
         print("Field comp", field, obsfield.field_no)
         if int(field) == obsfield.field_no:
+            # determine release by splitting filename (this should probably be it's own column)
+            print(column[0])
+            rel = column[0].split('_')[-1][:-4]
             
+            print("release number", rel)
+
             # change columns before inserting into db
             hd_num = column[1].strip('HD')
             v_mag = column[2]
@@ -43,6 +48,7 @@ def obs_to_db(file, obsfield):
             xsize = column[18]
             ysize = column[19]
             obsmode = column[20]
+            
             # print(
             #     'hd_num', str(hd_num)+'\n',
             #     'v_mag', str(v_mag)+'\n',
@@ -79,7 +85,8 @@ def obs_to_db(file, obsfield):
                 ypos = int(ypos),
                 xsize = int(xsize),
                 ysize = int(ysize),
-                obs_mode = str(obsmode)
+                obs_mode = str(obsmode),
+                data_release = str(rel),
             )
 
             message = "Observation Field uploaded successfully"

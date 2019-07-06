@@ -22,7 +22,11 @@
                         <td>{{ obs.v_mag }}</td> 
                         <td>{{ obs.sp_type }}</td> 
                         <td></td> 
-                        <td></td> 
+                        {% if obs.availability == "public" %}
+                            <td> <a href={{obs.url}}>Download</a></td>
+                        {% else %}
+                            <td>{{ obs.availabilty }}</td> 
+                        {% endif %}
                     </tr> 
                 {% endfor %}
         </div>

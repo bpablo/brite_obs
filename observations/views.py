@@ -55,17 +55,24 @@ class ObservationField(TemplateView):
         
         field_records = ObsRecords.objects.filter(field=field)
         stars = field_records.order_by('hd_num').values('hd_num').distinct()
+        #same for all stars
+        dr = field_records[0].data_release
+        print
         obsbystar = []
+        url = "https://brite.camk.edu.pl/pub/LC_pub/"+str(fieldno)+"-"+str(fieldname)+"_D"+str(dr)+"/"#21-CetEri-I-2016_DR5/"
         for x in range(len(stars)):
             starobs = field_records.filter(**stars[x])
+        #    url = "https://brite.camk.edu.pl/pub/LC_pub/"+str(fieldno)+str(field)+"_"+/"#21-CetEri-I-2016_DR5/"
             star_dict = {
                 "hd_num" : starobs[0].hd_num,
                 "star_name": starobs[0].star_name,
                 "v_mag" : starobs[0].v_mag,
                 "sp_type" : starobs[0].sp_type,
+                "availability" : starobs[0].availability,
+                "url"     : url,
             }
             obsbystar.append(star_dict)
-            
+        
         sats = field_records.values('sat_id').distinct()
         print(sats[0])
         dict = {
