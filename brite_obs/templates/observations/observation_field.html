@@ -8,7 +8,7 @@
        
             <table> 
                 <tr>
-                    <th>HD Number</th>
+                    <th>HD #</th>
                     <th>Name</th>
                     <th>Mag V</th>
                     <th>Spectral Type</th>
@@ -17,18 +17,22 @@
                 </tr>
                 {% for obs in obsbystar%}
                     <tr>
-                        <td>{{ obs.hd_num }}</td>   
-                        <td>{{ obs.star_name }}</td>
+                        <td><a href="{{ obs.id }}">{{ obs.hd_num }}</a></td>
+                        {% if obs.star_name != None%}   
+                            <td>{{ obs.star_name }}</td>
+                        {% else %}
+                            <td></td>
+                        {% endif %}
                         <td>{{ obs.v_mag }}</td> 
                         <td>{{ obs.sp_type }}</td> 
-                        <td></td> 
+                        <td>{{ obs.pi.last_name }}</td> 
                         {% if obs.availability == "public" %}
-                            <td> <a href={{obs.url}}>Download</a></td>
+                            <td> <a href={{url}}>Download</a></td>
                         {% else %}
-                            <td>{{ obs.availabilty }}</td> 
+                            <td>{{ obs.availability }}</td> 
                         {% endif %}
                     </tr> 
                 {% endfor %}
         </div>
     </div>
-{% endblock%}
+{% endblock %}

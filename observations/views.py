@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView
-from .models import ObsField, ObsRecords
+from .models import ObsField, ObsRecords, Stars
 from .forms import ObsForm
 from .extras import obs_to_db
 # Create your views here.
@@ -52,41 +52,56 @@ class ObservationField(TemplateView):
 
         field = ObsField.objects.get(field_no=fieldno, field_name=fieldname)
         #stars = field.order_by('hd_num').values('hd_num').distinct()
-        
-        field_records = ObsRecords.objects.filter(field=field)
-        stars = field_records.order_by('hd_num').values('hd_num').distinct()
+        stars = Stars.objects.filter(field=field)
+        #field_records = ObsRecords.objects.filter(field=field)
+        #star_ids = field_records.values_list('star', flat=True).distinct() 
+        #stars = Stars.objects.filter(id__in=star_ids).order_by('hd_num')
+
         #same for all stars
-        dr = field_records[0].data_release
-        print
+        dr = ObsRecords.objects.filter(star=stars[0])[0].data_release
         obsbystar = []
         url = "https://brite.camk.edu.pl/pub/LC_pub/"+str(fieldno)+"-"+str(fieldname)+"_D"+str(dr)+"/"#21-CetEri-I-2016_DR5/"
-        for x in range(len(stars)):
-            starobs = field_records.filter(**stars[x])
-        #    url = "https://brite.camk.edu.pl/pub/LC_pub/"+str(fieldno)+str(field)+"_"+/"#21-CetEri-I-2016_DR5/"
-            star_dict = {
-                "hd_num" : starobs[0].hd_num,
-                "star_name": starobs[0].star_name,
-                "v_mag" : starobs[0].v_mag,
-                "sp_type" : starobs[0].sp_type,
-                "availability" : starobs[0].availability,
-                "url"     : url,
-            }
-            obsbystar.append(star_dict)
+        # for x in range(len(stars)):
+        #     starobs = field_records.filter(**stars[x])
+        # #    url = "https://brite.camk.edu.pl/pub/LC_pub/"+str(fieldno)+str(field)+"_"+/"#21-CetEri-I-2016_DR5/"
+        #     star_dict = {
+        #         "hd_num" : starobs[0].hd_num,
+        #         "star_name": starobs[0].star_name,
+        #         "v_mag" : starobs[0].v_mag,
+        #         "sp_type" : starobs[0].sp_type,
+        #         "availability" : starobs[0].availability,
+        #         "url"     : url,
+        #     }
+        #     obsbystar.append(star_dict)
         
-        sats = field_records.values('sat_id').distinct()
+        sats = ObsRecords.objects.filter(star__in=stars).values('sat_id').distinct()
         print(sats[0])
-        dict = {
-            "pok1" : "bananas",
-            "pok2" : "nova",
-
-        }
 
         context = {
             'fieldno' : fieldno,
             'fieldname' : fieldname,
-            'field_records' : field_records,
-            'obsbystar' : obsbystar,
-            'test_dict' : dict
+        #    'field_records' : field_records,
+            'obsbystar' : stars,
+            'url' : url,
+            'sats' : sats,
+
         }
 
         return render(request, self.template_name, context)
+
+class StarView(TemplateView):  
+     template_name = "observations/starpage.html"
+     def get(self, request, fieldno, fieldname, star_id):
+
+        field = ObsField.objects.get(field_no=fieldno, field_name=fieldname)
+        star = Stars.objects.get(field=field, id=star_id)
+        print(star.hd_num, star.sp_type)
+        records = ObsRecords.objects.filter(star=star)
+
+        context = {
+            'star' : star,
+            'field' : field,
+            'records' : records,
+        }
+
+        return render(request, self.template_name, context)        

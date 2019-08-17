@@ -1,7 +1,7 @@
 """ Extra functions for dealing with data """
 
 import csv, io
-from .models import ObsRecords, Satellite
+from .models import ObsRecords, Satellite, PrincInv, Stars
 from astropy.time import Time
 
 
@@ -48,31 +48,45 @@ def obs_to_db(file, obsfield):
             xsize = column[18]
             ysize = column[19]
             obsmode = column[20]
+            pi_last_name = column[22]
             
-            # print(
-            #     'hd_num', str(hd_num)+'\n',
-            #     'v_mag', str(v_mag)+'\n',
-            #     'sptype', str(sptype)+'\n',
-            #     'name', str(name)+'\n',
-            #     'sat', str(sat)+'\n',
-            #     'tstart', str(tstart)+'\n',
-            #     'tend',  str(tend)+'\n',
-            #     'nred', str(nred)+'\n',
-            #     'norg', str(norg)+'\n',
-            #     'exptime', str(exptime)+'\n',
-            #     'nstack', str(nstack)+'\n',
-            #     'xpos', str(xpos)+'\n',
-            #     'ypos', str(ypos)+'\n',
-            #     'xsize', str(xsize)+'\n',
-            #     'ysize', str(ysize)+'\n',
-            #     'obsmode', str(obsmode)+'\n',
-            # )
+            #create star record 
+            #check to make sure it doesn't exist:
+            if Stars.objects.filter(hd_num=int(hd_num), field=obsfield):
+                print("the star already exists")
+                star = Stars.objects.get(hd_num=hd_num)
+            else:
+                print("Star Name Length", len(name), name+" this is the name")
+                print("PI Name", pi_last_name)
+                pi = PrincInv.objects.get(last_name = pi_last_name)
+                if len(name) <= 1:
+                    print("there is no spoon")
+                    _, created = Stars.objects.update_or_create(
+                        hd_num = int(hd_num),
+                        v_mag = float(v_mag),
+                        sp_type = str(sptype),
+                        pi = pi,
+                        field = obsfield,
+                    )
+                else:           
+                    _, created = Stars.objects.update_or_create(
+                        hd_num = int(hd_num),
+                        v_mag = float(v_mag),
+                        sp_type = str(sptype),
+                        star_name = str(name),
+                        pi = pi,
+                    )
+                print("I created the damn star")
+                star = Stars.objects.get(hd_num =int(hd_num))
+                print("I found the damn star")
+
             _, created = ObsRecords.objects.update_or_create(
-                field = obsfield,
-                hd_num = int(hd_num),
-                v_mag = float(v_mag),
-                sp_type = str(sptype),
-                star_name = str(name),
+#                field = obsfield,
+                star = star,
+                # hd_num = int(hd_num),
+                # v_mag = float(v_mag),
+                # sp_type = str(sptype),
+                # star_name = str(name),
                 sat = sat,
                 setup = str(setup),
                 obs_start = float(tstart),
@@ -87,6 +101,7 @@ def obs_to_db(file, obsfield):
                 ysize = int(ysize),
                 obs_mode = str(obsmode),
                 data_release = str(rel),
+
             )
 
             message = "Observation Field uploaded successfully"

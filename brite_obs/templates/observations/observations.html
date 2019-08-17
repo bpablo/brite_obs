@@ -30,7 +30,7 @@
             {% for field in Obsfields%}
                 <tr>
                     <td>{{ field.field_no }}</td>   
-                    <td>{{ field.field_name }}</td>
+                    <td><a href="{{ field.field_no }}/{{ field.field_name }}">{{ field.field_name }}</a></td>
                     <td>{{ field.field_status.field_status }}</td> 
                 </tr>
             {% endfor %}

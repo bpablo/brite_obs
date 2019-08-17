@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <div>
+        <h2>HD &nbsp; {{ star.hd_num }} &ensp; ({{star.name}}) </h2>
+        <br>
+
+        <div>
+            <table>
+                <tr>
+                    <td>Spectral Type</td>
+                    <td>{{star.sp_type}}</td>
+                </tr>    
+                <tr>
+                    <td>V Magnitude</td>
+                    <td>{{star.v_mag}}</td>
+                </tr>                    <tr>
+                    <td>Field</td>
+                    <td>{{field.field_no}}-{{field.field_name}}</td>
+                </tr>                  
+            </table>
+        </div>
+        <div>
+            <table>
+                <tr>
+                    <th>Satellite</th>
+                    <th>Setup</th>
+                    <th>Obs Start</th>
+                    <th>Obs End</th>
+                </tr>
+                {% for record in records %}
+                    <tr>
+                        <td>{{ record.sat.sat_id }}</td>
+                        <td>{{ record.setup }}</td>
+                        <td>{{ record.obs_start }}</td>
+                        <td>{{ record.obs_end }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+{% endblock %}
