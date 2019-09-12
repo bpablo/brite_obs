@@ -3,8 +3,19 @@
 import csv, io
 from .models import ObsRecords, Satellite, PrincInv, Stars
 from astropy.time import Time
+from astroquery.simbad import Simbad
 
 
+def find_hd_num(name):
+    result_table = Simbad.query_objectids(name)
+    for x in result_table:
+        name = x[0]
+        if 'HD' in name:
+            hd_num = name.split(' ')[-1]
+            return hd_num
+    name = ''
+    return name
+  
 def cal_to_jd(dates):
     dates = dates+'T00:00:00'
     times = Time(dates).jd

@@ -1,8 +1,11 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView
 from .models import ObsField, ObsRecords, Stars
-from .forms import ObsForm
-from .extras import obs_to_db
+from .forms import ObsForm, SearchForm
+from .extras import obs_to_db, find_hd_num
+
+
+
 # Create your views here.
 
 class obs_submission(TemplateView):
@@ -104,4 +107,57 @@ class StarView(TemplateView):
             'records' : records,
         }
 
-        return render(request, self.template_name, context)        
+        return render(request, self.template_name, context)   
+
+class SearchView(TemplateView):
+
+    template_name = 'observations/obs_search.html'
+
+    def get(self, request):
+        
+        form = SearchForm()
+
+        return render(request, self.template_name, {'form' : form}) 
+
+    def post(self, request):    
+
+        form = SearchForm(request.POST)
+        
+        star = form['starsearch']
+        #TODO add cleaning function for input
+        print(form['starsearch'])
+        # find star name in simbad and return HD number
+        name = star.value()
+  #      print(name)
+  #      hd_num = find_hd_num(name)
+  #      print(hd_num)        
+        try:
+            hd_num = find_hd_num(name)
+            print(hd_num)
+        except:
+            print('i errored out ')
+            error = '{} was not recognized by Simbad'.format(name)
+            context = {
+                'form': form,
+                'error': error,
+            }
+            Observations= None
+            return render(request, self.template_name, context)
+        #print(hd_num) 
+        if hd_num == '':
+            error = 'No records found for {}'.format(name)
+            Observations = None
+        #If something is actually found do database query
+        else: 
+            Observations = Stars.objects.filter(hd_num = hd_num)
+            if len(Observations) == 0:
+                error = 'No records found for {}'.format(name)
+            else:
+                error = None
+        context ={
+            'form': form,
+            'error': error ,
+            'Observations': Observations,
+        }    
+        print(Observations)
+        return render(request, self.template_name, context)

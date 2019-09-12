@@ -14,3 +14,11 @@ class ObsForm(forms.Form):
         label = "Observation File",
         required = True,     
     )
+
+class SearchForm(forms.Form):
+
+    starsearch = forms.CharField(
+        label = 'Search by Star Name', 
+        required = True,   
+        max_length = 25,
+    )

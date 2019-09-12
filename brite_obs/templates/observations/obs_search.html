@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class='container'>
+    <h1>Search BRITE</h1>
+    <form method="post" > <!--enctype="multipart/form-data"> -->
+        {% csrf_token %}
+        {{ form.as_p }}
+<!--     <input type="file" name="file"> -->
+        <button type="submit">Search</button>
+    </form>
+</div>
+{% if Observations %}
+    <div class='container'>
+        <h1> Obs </h1>
+
+        {% for obs in Observations %}
+            <h1>{{ obs.hd_num }}</h1>
+        {% endfor %}
+
+
+    </div>
+{% elif error %}
+     <div class='container'>
+        <h1>{{ error }}</h1>
+    </div>   
+{% endif %}
+{% endblock %}
