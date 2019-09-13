@@ -30,7 +30,7 @@ class obs_submission(TemplateView):
 
         status_message = obs_to_db(obsfile, field)
         print(status_message)
-        return render(request, self.template_name)
+        return render(request, self.template_name,{'form':form})
 
 
 class Observations(TemplateView):

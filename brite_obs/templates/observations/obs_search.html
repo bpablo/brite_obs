@@ -12,17 +12,26 @@
 </div>
 {% if Observations %}
     <div class='container'>
-        <h1> Obs </h1>
+        <h1> Search Results </h1>
 
         {% for obs in Observations %}
-            <h1>{{ obs.hd_num }}</h1>
+            <tr>
+                <td>HD {{ obs.hd_num }}</td>
+                <td> {{ obs.field}}</td>
+                {% if obs.availability == 'Public' %}
+                    <td> Download </td>
+                {% else %}
+                    <td> Proprietary </td>
+                {% endif %}
+            </tr>
         {% endfor %}
 
 
     </div>
 {% elif error %}
-     <div class='container'>
-        <h1>{{ error }}</h1>
+    <h1> Search Results </h1>
+    <div class='container'>
+        <h4 style="color:red;">{{ error }}</h4>
     </div>   
 {% endif %}
 {% endblock %}

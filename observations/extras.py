@@ -24,7 +24,7 @@ def cal_to_jd(dates):
 # @todo add som more cleaning to this 
 def obs_to_db(file, obsfield):
     """ parse log file and place in observations table """
-
+    print(obsfield.id)
     # decode data
     data = file.read().decode('UTF-8')
     io_string = io.StringIO(data)
@@ -33,13 +33,13 @@ def obs_to_db(file, obsfield):
     for column in csv.reader(io_string, delimiter=','):
         # make sure  we have the right field
         field = column[5].split('-')[0]
-        print("Field comp", field, obsfield.field_no)
+  #      print("Field comp", field, obsfield.field_no)
         if int(field) == obsfield.field_no:
             # determine release by splitting filename (this should probably be it's own column)
             print(column[0])
             rel = column[0].split('_')[-1][:-4]
             
-            print("release number", rel)
+#            print("release number", rel)
 
             # change columns before inserting into db
             hd_num = column[1].strip('HD')
@@ -67,11 +67,11 @@ def obs_to_db(file, obsfield):
                 print("the star already exists")
                 star = Stars.objects.get(hd_num=hd_num)
             else:
-                print("Star Name Length", len(name), name+" this is the name")
-                print("PI Name", pi_last_name)
+#                print("Star Name Length", len(name), name+" this is the name")
+#                print("PI Name", pi_last_name)
                 pi = PrincInv.objects.get(last_name = pi_last_name)
                 if len(name) <= 1:
-                    print("there is no spoon")
+#                    print("there is no spoon")
                     _, created = Stars.objects.update_or_create(
                         hd_num = int(hd_num),
                         v_mag = float(v_mag),
@@ -86,10 +86,11 @@ def obs_to_db(file, obsfield):
                         sp_type = str(sptype),
                         star_name = str(name),
                         pi = pi,
+                        field = obsfield,
                     )
-                print("I created the damn star")
+     #           print("I created the damn star")
                 star = Stars.objects.get(hd_num =int(hd_num))
-                print("I found the damn star")
+     #           print("I found the damn star")
 
             _, created = ObsRecords.objects.update_or_create(
 #                field = obsfield,

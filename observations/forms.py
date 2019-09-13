@@ -21,4 +21,5 @@ class SearchForm(forms.Form):
         label = 'Search by Star Name', 
         required = True,   
         max_length = 25,
+        widget=forms.TextInput(attrs={'placeholder': 'Del Ori'}),
     )
