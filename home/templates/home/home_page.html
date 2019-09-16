@@ -1,21 +1,19 @@
 {% extends "base.html" %}
-{% load static %}
-
-{% block body_class %}template-homepage{% endblock %}
-
-{% block extra_css %}
-
-{% comment %}
-Delete the line below if you're just getting started and want to remove the welcome screen!
-{% endcomment %}
-<link rel="stylesheet" href="{% static 'css/welcome_page.css' %}">
-{% endblock extra_css %}
+{% load wagtailcore_tags wagtailimages_tags %}
 
 {% block content %}
 
-{% comment %}
-Delete the line below if you're just getting started and want to remove the welcome screen!
-{% endcomment %}
-{% include 'home/welcome_page.html' %}
+{% image self.banner_image width-1500 as img %}
 
-{% endblock content %}
+    <div class="jumbotron" style="background-image: url('{{ img.url }}'); background-size: cover; color: #fff !important">
+        <h1 class="display-4">{{ self.banner_title }}</h1>
+        <div class="lead"> {{self.banner_subtitle|richtext }} </div>
+        <!-- todo -->
+        {% if self.banner_cta %}
+            <a class="btn btn-primary btn-lg" href="#" role="button">@todo</a>
+        {% endif %}
+        <br>
+    </div>
+
+{% endblock %}
+

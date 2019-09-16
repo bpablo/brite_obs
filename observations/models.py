@@ -35,7 +35,7 @@ class Stars(models.Model):
     hd_num = models.IntegerField(blank=True, null=True)
     v_mag = models.DecimalField(decimal_places=3, max_digits=5, blank=True, null=True)
     sp_type = models.CharField(max_length=45, blank=True, null=True)
-    star_name = models.CharField(max_length=45, blank=True, null=True)
+    star_name = models.CharField(max_length=45, blank=True, null=True, unique=False)
     pi = models.ForeignKey(PrincInv, on_delete=models.CASCADE, null=True)
     availability = models.CharField(max_length=45, default='PP', blank=False, null=False)
     field = models.ForeignKey(ObsField, on_delete=models.CASCADE, null=True)

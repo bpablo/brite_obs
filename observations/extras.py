@@ -65,11 +65,14 @@ def obs_to_db(file, obsfield):
             #check to make sure it doesn't exist:
             if Stars.objects.filter(hd_num=int(hd_num), field=obsfield):
                 print("the star already exists")
-                star = Stars.objects.get(hd_num=hd_num)
+                star = Stars.objects.get(hd_num=int(hd_num), field=obsfield)
             else:
 #                print("Star Name Length", len(name), name+" this is the name")
 #                print("PI Name", pi_last_name)
-                pi = PrincInv.objects.get(last_name = pi_last_name)
+                if pi_last_name == 'none':
+                    pi = None
+                else:
+                    pi = PrincInv.objects.get(last_name = pi_last_name)
                 if len(name) <= 1:
 #                    print("there is no spoon")
                     _, created = Stars.objects.update_or_create(
@@ -89,7 +92,7 @@ def obs_to_db(file, obsfield):
                         field = obsfield,
                     )
      #           print("I created the damn star")
-                star = Stars.objects.get(hd_num =int(hd_num))
+                star = Stars.objects.get(hd_num =int(hd_num), field=obsfield)
      #           print("I found the damn star")
 
             _, created = ObsRecords.objects.update_or_create(
