@@ -39,7 +39,7 @@ class Observations(TemplateView):
 
     def get(self, request):
 
-        Obsfields  = ObsField.objects.all()
+        Obsfields  = ObsField.objects.all().order_by('field_no')
         context = {
             'Obsfields': Obsfields
         }
@@ -63,7 +63,7 @@ class ObservationField(TemplateView):
         #same for all stars
         dr = ObsRecords.objects.filter(star=stars[0])[0].data_release
         obsbystar = []
-        url = "https://brite.camk.edu.pl/pub/LC_pub/"+str(fieldno)+"-"+str(fieldname)+"_D"+str(dr)+"/"#21-CetEri-I-2016_DR5/"
+        url = "https://brite.camk.edu.pl/pub/LC_pub/"+"{:2d}".format(fieldno)+"-"+str(fieldname)+"_D"+str(dr)+"/"#21-CetEri-I-2016_DR5/"
         # for x in range(len(stars)):
         #     starobs = field_records.filter(**stars[x])
         # #    url = "https://brite.camk.edu.pl/pub/LC_pub/"+str(fieldno)+str(field)+"_"+/"#21-CetEri-I-2016_DR5/"
@@ -80,7 +80,7 @@ class ObservationField(TemplateView):
         sats = ObsRecords.objects.filter(star__in=stars).values('sat_id').distinct()
         print(sats[0])
 
-        context = {
+        context = { 
             'fieldno' : fieldno,
             'fieldname' : fieldname,
         #    'field_records' : field_records,

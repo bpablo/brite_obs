@@ -17,9 +17,9 @@
         {% for obs in Observations %}
             <tr>
                 <td>HD {{ obs.hd_num }}</td>
-                <td> {{ obs.field}}</td>
-                {% if obs.availability == 'Public' %}
-                    <td> Download </td>
+                <td> {{ obs.field }}</td>
+                {% if obs.availability == 'public' %}
+                    <td> <a href="https://brite.camk.edu.pl/pub/LC_pub/"+"{:2d}".format({{obs.field.field_no}})+"-"+{{obs.field.field_name}}+"_D"+str({{ obs.data_release }})+"/">Download<a> </td>
                 {% else %}
                     <td> Proprietary </td>
                 {% endif %}

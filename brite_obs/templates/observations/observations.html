@@ -6,7 +6,7 @@
         table {
             display: table;
             border-collapse: separate;
-            border-spacing: 2px;
+            border-spacing: 5px;
             border-color: gray;
         }
     </style>
@@ -23,13 +23,13 @@
         <br><br>
         <table> 
             <tr>
-                <th>Field no.</th>
+                <th>No.</th>
                 <th>Obs ID</th>
                 <th>Field Status</th>
             </tr>
             {% for field in Obsfields%}
                 <tr>
-                    <td>{{ field.field_no }}</td>   
+                    <td>{{ field.field_no|stringformat:"02d" }}</td>   
                     <td><a href="{{ field.field_no }}/{{ field.field_name }}">{{ field.field_name }}</a></td>
                     <td>{{ field.field_status.field_status }}</td> 
                 </tr>
