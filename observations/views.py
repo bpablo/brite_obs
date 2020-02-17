@@ -63,7 +63,9 @@ class ObservationField(TemplateView):
         #same for all stars
         dr = ObsRecords.objects.filter(star=stars[0])[0].data_release
         obsbystar = []
-        url = "https://brite.camk.edu.pl/pub/LC_pub/"+"{:2d}".format(fieldno)+"-"+str(fieldname)+"_D"+str(dr)+"/"#21-CetEri-I-2016_DR5/"
+#        url = "https://brite.camk.edu.pl/pub/LC_pub/"+"{:2d}".format(int(fieldno))+"-"+str(fieldname)+"_D"+str(dr)+"/"#21-CetEri-I-2016_DR5/"
+        url = "https://brite.camk.edu.pl/pub/LC_pub/"+"{:02d}".format(fieldno)+"-"+str(fieldname)+"_D"+str(dr)+"/"
+#        print(url)
         # for x in range(len(stars)):
         #     starobs = field_records.filter(**stars[x])
         # #    url = "https://brite.camk.edu.pl/pub/LC_pub/"+str(fieldno)+str(field)+"_"+/"#21-CetEri-I-2016_DR5/"
@@ -78,7 +80,7 @@ class ObservationField(TemplateView):
         #     obsbystar.append(star_dict)
         
         sats = ObsRecords.objects.filter(star__in=stars).values('sat_id').distinct()
-        print(sats[0])
+      
 
         context = { 
             'fieldno' : fieldno,
@@ -150,6 +152,11 @@ class SearchView(TemplateView):
         #If something is actually found do database query
         else: 
             Observations = Stars.objects.filter(hd_num = hd_num)
+            for x in range(len(Observations)):
+                dr = ObsRecords.objects.filter(star=Observations[x])[0].data_release
+                url = "https://brite.camk.edu.pl/pub/LC_pub/"+"{:02d}".format(Observations[x].field.field_no)+"-"+str(Observations[x].field.field_name)+"_D"+str(dr)+"/"
+                Observations[x].url = url
+
             if len(Observations) == 0:
                 error = 'No records found for {}'.format(name)
             else:
