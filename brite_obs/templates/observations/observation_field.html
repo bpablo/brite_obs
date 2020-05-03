@@ -1,17 +1,20 @@
 {% extends "base.html" %}
-
+{% load static %}
+<head>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/brite_obs.css' %}">
+</head>
 {% block content %}
-    <div>
+    <div class=container>
         <h1>{{ fieldno|stringformat:"02d" }}<br>{{ fieldname }}</h1>
          <br><br>
         <div>     
        
-            <table> 
+            <table class=content-table> 
                 <tr>
                     <th>HD #</th>
                     <th>Name</th>
                     <th>Mag V</th>
-                    <th>Spectral Type</th>
+                    <th>Sp. Type</th>
                     <th>PI</th>
                     <th>Availability</th>
                 </tr>

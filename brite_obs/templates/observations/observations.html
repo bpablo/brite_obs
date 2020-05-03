@@ -1,18 +1,6 @@
 {% extends 'base.html' %}
 <!-- @todo make pretty-->
 
-{% block extra_css %}
-    <style>
-        table {
-            display: table;
-            border-collapse: separate;
-            border-spacing: 5px;
-            border-color: gray;
-        }
-    </style>
-
-{% endblock %}
-
 {% block content %}
 
     <div class=container> 
@@ -21,7 +9,7 @@
             <h1>BRITE Observation Fields</h1>
         </div>
         <br><br>
-        <table> 
+        <table class=content-table> 
             <tr>
                 <th>No.</th>
                 <th>Obs ID</th>
